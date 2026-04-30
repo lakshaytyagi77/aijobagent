@@ -1,0 +1,33 @@
+# Secrets — never commit these
+.env
+service_account.json
+*.json.key
+
+# Resume — personal data
+resume.pdf
+
+# Runtime output
+jobs_raw.json
+tracker.json
+run_log.txt
+cron_log.txt
+
+# Generated content
+tailored/
+screenshots/
+prep/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp

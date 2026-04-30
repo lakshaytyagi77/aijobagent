@@ -1,0 +1,22 @@
+{
+  "job_titles": [
+    "HR Manager",
+    "HR Business Partner",
+    "Senior HR Executive",
+    "People Operations Manager",
+    "Talent Acquisition Lead"
+  ],
+  "experience_years": 5,
+  "location_preference": ["India", "Remote", "Hybrid"],
+  "keywords_to_match": [
+    "HRBP",
+    "talent management",
+    "performance management",
+    "employee engagement",
+    "HR strategy"
+  ],
+  "daily_apply_limit": 10,
+  "min_fit_score": 65,
+  "resume_path": "resume.pdf",
+  "headless": false
+}
