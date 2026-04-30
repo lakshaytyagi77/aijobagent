@@ -99,22 +99,30 @@ async def run_pipeline(skip_scrape: bool = False, skip_apply: bool = False) -> d
     stats["qualified"] = len(qualified)
     log.info(f"Tailored {len(qualified)} qualified jobs")
 
-    # Phase 3 — Apply
+    # Phase 3 — Push scraped jobs to Google Sheets for review
+    divider("PHASE 3 — Sync Jobs to Google Sheets (Job Pipeline tab)")
+    try:
+        from logger import sync_scraped_to_sheets
+        sync_scraped_to_sheets()
+    except Exception as e:
+        log.error(f"Sheets job sync failed: {e}")
+
+    # Phase 4 — Apply
     if not skip_apply:
-        divider("PHASE 3 — Apply")
+        divider("PHASE 4 — Apply")
         from applier import run_applier
         apply_stats = await run_applier()
         stats.update(apply_stats)
 
-        # Phase 4 — Log
-        divider("PHASE 4 — Google Sheets Sync")
+        # Phase 5 — Log applied jobs
+        divider("PHASE 5 — Sync Applications to Google Sheets")
         try:
             from logger import sync_tracker_to_sheets
             sync_tracker_to_sheets()
         except Exception as e:
-            log.error(f"Sheets sync failed: {e}")
+            log.error(f"Sheets applied sync failed: {e}")
     else:
-        log.info("Skipping apply + log phases")
+        log.info("Skipping apply phase — review jobs in the 'Job Pipeline' tab in Google Sheets")
 
     divider("DONE")
     log.info(json.dumps(stats, indent=2))
@@ -169,7 +177,8 @@ Examples:
         return
 
     if args.log:
-        from logger import sync_tracker_to_sheets
+        from logger import sync_scraped_to_sheets, sync_tracker_to_sheets
+        sync_scraped_to_sheets()
         sync_tracker_to_sheets()
         return
 
