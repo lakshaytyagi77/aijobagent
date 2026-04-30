@@ -312,6 +312,18 @@ async def run_scraper() -> list:
                     print(f"\n[*] {job_title} | {loc}")
                     jobs = await scrape_search(page, job_title, loc, applied_ids, seen_ids)
                     all_jobs.extend(jobs)
+
+                    # Write to sheet immediately after each search batch
+                    if jobs:
+                        Path(JOBS_RAW_FILE).write_text(
+                            json.dumps(all_jobs, indent=2, ensure_ascii=False)
+                        )
+                        try:
+                            from logger import sync_scraped_to_sheets
+                            sync_scraped_to_sheets()
+                        except Exception as e:
+                            print(f"  [!] Sheet sync skipped: {e}")
+
                     await human_delay(8, 15)
         finally:
             await browser.close()
