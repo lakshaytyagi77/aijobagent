@@ -290,8 +290,9 @@ async def run_applier(daily_limit: int = None) -> dict:
     stats = {"applied": 0, "failed": 0, "skipped": 0}
 
     async with async_playwright() as p:
+        headless = os.getenv("HEADLESS", "").lower() in ("true", "1") or config.get("headless", False)
         browser = await p.chromium.launch(
-            headless=config.get("headless", False),
+            headless=headless,
             args=["--no-sandbox", "--disable-blink-features=AutomationControlled"],
         )
         context = await browser.new_context(

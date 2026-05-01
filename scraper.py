@@ -281,8 +281,9 @@ async def run_scraper() -> list:
     all_jobs: list = []
 
     async with async_playwright() as p:
+        headless = os.getenv("HEADLESS", "").lower() in ("true", "1") or config.get("headless", False)
         browser = await p.chromium.launch(
-            headless=config.get("headless", False),
+            headless=headless,
             args=[
                 "--no-sandbox",
                 "--disable-dev-shm-usage",
